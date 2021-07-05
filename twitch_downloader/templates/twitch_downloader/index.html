@@ -1,0 +1,84 @@
+{% load static %}
+<!DOCTYPE HTML>
+<!--
+	Eventually by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Clippy for Twitch</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{% static 'twitch_downloader/assets/css/main.css' %}" />
+	</head>
+	<body class="is-preload">
+
+		<!-- Header -->
+			<header id="header">
+				<h1>Clippy for Twitch</h1>
+				<p>Easily download the most viewed Twitch clips from
+					<span
+						class="txt-rotate"
+						data-period="3000"
+						data-rotate='[ "hasanabi.",
+									   "Just Chatting.", 
+									   "League of Legends.", 
+									   "Grand Theft Auto V.", 
+									   "adinross.",
+									   "moonmoon.",
+									   "Escape from Tarkov.",
+									   "npmlol.",
+									   "pokimane.",
+									   "Fortnite.",
+									   "sodapoppin.",
+									   "World of Warcraft.",
+									   "ricegum.",
+									   "Valorant.",
+									   "lirik.",
+									   "summit1g."
+									   ]'></span>
+				</p>
+			</header>
+
+		<!-- download Form -->
+			<form id="download-form" method="post" onsubmit="return validateName();">
+				{% csrf_token %} 
+				<!-- {{ form }} -->
+				
+				<input type="name" name="twitch-name" id="name" placeholder="Streamer or Game" required/>
+				<select id="period" name="period" placeholder="Period"> 
+					<option value="daily">Daily</option>
+					<option value="weekly">Weekly</option>
+					<option value="monthly">Monthly</option>
+					<option value="yearly">Yearly</option>
+				</select>
+
+				<input type="number" name="limit" id="limit" min="1" max="100" placeholder="# of clips" required />
+				
+				<input type="submit" value="Download" />
+				
+			</form>
+		
+		<!-- Footer -->
+			<footer id="footer">
+				<ul class="icons">
+					<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+					<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+					<li><a href="#" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+					<li><a href="#" class="icon fa-envelope"><span class="label">name</span></a></li>
+				</ul>
+				<ul class="copyright">
+					<li>&copy; Untitled.</li><li>Credits: <a href="http://html5up.net">HTML5 UP</a></li>
+				</ul>
+			</footer>
+
+		<!-- Scripts -->
+		<script type="text/javascript">
+			GLOBAL_PATH = '{{ STATIC_URL }}'
+		</script>
+			<script src="{% static 'twitch_downloader/assets/js/main.js' %}"></script>
+
+	</body>
+
+</html>
