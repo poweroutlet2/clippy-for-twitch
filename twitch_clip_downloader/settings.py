@@ -21,14 +21,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-n=r7mgipu+0!9+yn_58bt9i67=sdjux%v@e1fx+9m^tf_-2*y_'
+#SECRET_KEY = 'django-insecure-n=r7mgipu+0!9+yn_58bt9i67=sdjux%v@e1fx+9m^tf_-2*y_'
+CLIPPY_SECRET_KEY = os.environ.get('CLIPPY_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True #os.environ.get('DEBUG') 
 
-ALLOWED_HOSTS = []
-
-
+ALLOWED_HOSTS = [
+    'https://clippyfortwitch.herokuapp.com/',
+]
 # Application definition
 
 INSTALLED_APPS = [
