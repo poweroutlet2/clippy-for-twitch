@@ -19,6 +19,12 @@ def zipdir(path, ziph):
             ziph.write(os.path.join(root, file), 
                        os.path.relpath(os.path.join(root, file), 
                                        os.path.join(path, '..')))
+
+def delete_files_in_dir(dir):
+    # Delete all files in given directory
+    # dir: full path to directory
+    for f in os.listdir(dir):
+        os.remove(os.path.join(dir, f))
       
 
 

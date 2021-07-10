@@ -2,7 +2,7 @@ import requests
 from requests.utils import quote #percent encoding
 import os
 from datetime import datetime, timedelta, date
-from .downloadandzip import download_file, zipdir
+from .downloadandzip import download_file, zipdir, delete_files_in_dir
 import zipfile
 import pathlib
 import shutil
@@ -103,7 +103,11 @@ class TwitchAPI():
         return top_clips
     
     def download_clips_directory(self, clips, dirname, max, directoryname='', language='en'):
-        cwd = pathlib.Path().absolute()
+        cwd = '{}\\media'.format(pathlib.Path().absolute())
+
+        # Delete previous downloaded files
+        if os.path.exists(cwd):
+            delete_files_in_dir(cwd)
         path = '{}\\{} {}'.format(cwd, dirname, date.today().strftime('%B %d %Y'))
         if not os.path.exists(path):
             os.mkdir(path)

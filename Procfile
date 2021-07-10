@@ -1,1 +1,0 @@
-web: gunicorn twitch_clip_downloader.wsgi
