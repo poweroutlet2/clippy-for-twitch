@@ -5,6 +5,7 @@ from datetime import datetime, timedelta, date
 from .downloadandzip import download_file, zipdir, delete_files_in_dir
 import zipfile
 import pathlib
+from pathlib import Path
 import shutil
 
 class TwitchAPI():
@@ -103,20 +104,20 @@ class TwitchAPI():
         return top_clips
     
     def download_clips_directory(self, clips, dirname, max, directoryname='', language='en'):
-        cwd = '{}\\media'.format(pathlib.Path().absolute())
+        cwd = Path('{}/media'.format(pathlib.Path().__str__()))
 
         # Delete previous downloaded files
-        if os.path.exists(cwd):
-            delete_files_in_dir(cwd)
-        path = '{}\\{} {}'.format(cwd, dirname, date.today().strftime('%B %d %Y'))
-        if not os.path.exists(path):
-            os.mkdir(path)
+        if cwd.exists():
+            delete_files_in_dir(cwd.__str__)
+        path = Path('{}/{}_{}'.format(cwd.__str__, dirname, date.today().strftime('%B %d %Y')))
+        if not path.exists():
+            os.mkdir(path.__str__)
         i = 1
         for clip in clips:
             if clip['language'] == language:
                 keepcharacters = (' ','.', '_') #special chars to be kept in filename
-                description = path + '\description.txt'
-                with open(description, 'a', encoding="utf-8") as file:
+                description = Path(path.__str__ + '/description.txt')
+                with open(description.__str__, 'a', encoding="utf-8") as file:
                     file.write('Clip #{}\n'.format(i))
                     file.write('Streamer: {}\n'.format(clip['broadcaster_name']))
                     file.write('Clip Title: {}\n'.format(clip['title']))
@@ -131,27 +132,27 @@ class TwitchAPI():
                     #remove special chars from filename
                     video_filename = f'{i}. ' + clip['broadcaster_name'] + '_' + clip['title']
                     video_filename = "".join(c for c in video_filename if c.isalnum() or c in keepcharacters).rstrip()
-                    filename = path + directoryname + '\\' + video_filename 
+                    filename = Path(path + directoryname + '/' + video_filename)
 
                     file.close()
                 download_file(vid_url, filename=filename)
                 clip['filepath'] = filename
-                i = i+1
+                i += 1
                 if i > int(max):
                     break
 
         #zip directory
         zipf = zipfile.ZipFile(path + '.zip', 'w', zipfile.ZIP_DEFLATED)
-        zipdir(path, zipf)
+        zipdir(path.__str__, zipf)
         zipf.close()  
 
         #delete original directory
-        dir_path = path.split('.')[0]
+        dir_path = path.__str__.split('.')[0]
 
         if os.path.exists(dir_path):
             shutil.rmtree(dir_path)
 
-        return path + '.zip'
+        return path.__str__ + '.zip'
 
     def download_game_clips(self, id, period, limit, name):
         clips = self.getTopClips(game_id=id)
