@@ -36,12 +36,20 @@
 									   "ricegum.",
 									   "Valorant.",
 									   "lirik.",
-									   "summit1g."
+									   "summit1g.",
+									   "asomgold.",
+									   "ninja.",
+									   "Rust.",
+									   "Amouranth.",
+									   "TrackMania.",
+									   "Sea of Theives.",
+									   "ibai.",
+									   "Myth"
 									   ]'></span>
 				</p>
 			</header>
 
-		<!-- download Form -->
+		<!-- download Forms -->
 			<form id="download-form" method="post" onsubmit="return validateName();">
 				{% csrf_token %} 
 				<!-- {{ form }} -->
@@ -59,13 +67,26 @@
 				<input type="submit" value="Download" />
 				
 			</form>
+
+			{% comment %} <p>or</p>
+			<!-- slug form -->
+			<form id="download-form" method="post" onsubmit="return validateName();">
+				{% csrf_token %} 
+				<!-- {{ form }} -->
+				
+				<input type="slug" name="twitch-slug" id="slug" placeholder="Clip Link or Slug" required/>
+
+				<input type="submit" value="Download" />
+				
+			</form> {% endcomment %}
+
 		
 		<!-- Footer -->
 			<footer id="footer">
 				<ul class="icons">
-					<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+					<li><a href="https://twitter.com/harshadlul" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
 					<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
-					<li><a href="#" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+					<li><a href="https://github.com/poweroutlet2" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
 					<li><a href="harshp2015i@gmail.com" class="icon fa-envelope"><span class="label">name</span></a></li>
 				</ul>
 		

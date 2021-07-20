@@ -103,21 +103,29 @@ class TwitchAPI():
         top_clips = requests.get(url, headers=headers).json()['data']
         return top_clips
     
-    def download_clips_directory(self, clips, dirname, max, directoryname='', language='en'):
-        cwd = Path('{}/media'.format(pathlib.Path().__str__()))
+    def get_slug_clip(self, slug):
+        url = 'https://api.twitch.tv/helix/clips?id=' + slug
+        headers = {'Client-Id': self.client_id, 'Authorization' : self.bearer_token}
+        print(url)
+        
+        return requests.get(url, headers=headers).json()['data']
 
+    def download_clips_directory(self, clips, dirname='', max='5', language='en'):
+        media_dir = str(Path('{}/media'.format(os.getcwd())))
+        
         # Delete previous downloaded files
-        if cwd.exists():
-            delete_files_in_dir(cwd.__str__)
-        path = Path('{}/{}_{}'.format(cwd.__str__, dirname, date.today().strftime('%B %d %Y')))
-        if not path.exists():
-            os.mkdir(path.__str__)
+        if os.path.exists(media_dir):
+            delete_files_in_dir(media_dir)
+
+        clips_path = str(Path('{}/{}_{}'.format(media_dir, dirname, date.today().strftime('%B %d %Y'))))
+        if not os.path.exists(clips_path):
+            os.mkdir(clips_path)
         i = 1
         for clip in clips:
             if clip['language'] == language:
                 keepcharacters = (' ','.', '_') #special chars to be kept in filename
-                description = Path(path.__str__ + '/description.txt')
-                with open(description.__str__, 'a', encoding="utf-8") as file:
+                description = str(Path(clips_path + '/description.txt'))
+                with open(description, 'a', encoding="utf-8") as file:
                     file.write('Clip #{}\n'.format(i))
                     file.write('Streamer: {}\n'.format(clip['broadcaster_name']))
                     file.write('Clip Title: {}\n'.format(clip['title']))
@@ -132,8 +140,7 @@ class TwitchAPI():
                     #remove special chars from filename
                     video_filename = f'{i}. ' + clip['broadcaster_name'] + '_' + clip['title']
                     video_filename = "".join(c for c in video_filename if c.isalnum() or c in keepcharacters).rstrip()
-                    filename = Path(path + directoryname + '/' + video_filename)
-
+                    filename = str(Path(clips_path + '/' + video_filename))
                     file.close()
                 download_file(vid_url, filename=filename)
                 clip['filepath'] = filename
@@ -142,28 +149,35 @@ class TwitchAPI():
                     break
 
         #zip directory
-        zipf = zipfile.ZipFile(path + '.zip', 'w', zipfile.ZIP_DEFLATED)
-        zipdir(path.__str__, zipf)
+        zipf = zipfile.ZipFile(clips_path + '.zip', 'w', zipfile.ZIP_DEFLATED)
+        zipdir(clips_path, zipf)
         zipf.close()  
 
         #delete original directory
-        dir_path = path.__str__.split('.')[0]
+        dir_path = clips_path.split('.')[0]
+
 
         if os.path.exists(dir_path):
             shutil.rmtree(dir_path)
 
-        return path.__str__ + '.zip'
+        return clips_path + '.zip'
+
+    def download_slug_clip(self, slug):
+        clip = self.get_slug_clip(slug)
+        print(clip)
+        return self.download_clips_directory(clips=clip, dirname=slug)
+        
 
     def download_game_clips(self, id, period, limit, name):
         clips = self.getTopClips(game_id=id)
         video_title = self.download_clips_directory(clips, dirname='{}_{}_Clips - '.format(name, period), max=limit)
         return video_title
     
+    
     def download_broadcaster_clips(self, id, period, limit, name):
         clips = self.getTopClips(broadcaster_id=id)
         video_title = self.download_clips_directory(clips, dirname='{}_{}_Clips - '.format(name, period), max=limit)
         return video_title
-
         
     def __init__(self):
         self.bearer_token = self.refreshBearerToken()

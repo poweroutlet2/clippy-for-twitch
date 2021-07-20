@@ -24,7 +24,9 @@ def delete_files_in_dir(dir):
     # Delete all files in given directory
     # dir: full path to directory
     for f in os.listdir(dir):
-        os.remove(os.path.join(dir, f))
-      
+        try:
+            os.remove(os.path.join(dir, f))
+        except OSError:
+            pass
 
 
