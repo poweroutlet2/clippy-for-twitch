@@ -9,8 +9,8 @@ from pathlib import Path
 import shutil
 
 class TwitchAPI():
-    client_id = 'dx2ou4o2g01z8c2ypbcz104c3x72q1'
-    twitch_secret = 'ggr1krw2rh54baclvyxjfm6tfyvwjp' #os.environ['TWITCH_SECRET']
+    client_id = os.environ['TWITCH_CLIENTID']
+    twitch_secret = os.environ['TWITCH_SECRET']
     bearer_token = ''
     bearer_token_expiration = ''
 
